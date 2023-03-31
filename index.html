@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  padding: 30px;
+  text-align: center;
+  background: white;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {   
+  float: left;
+  width: 75%;
+}
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  width: 25%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+
+/* Fake image */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Add a card effect for articles */
+.card {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Clear floats after the columns */
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {   
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+}
+</style>
+<link rel="stylesheet" href="./lib/css/jquery-ui.min.css">
+<link href="./DataTables/DataTables-1.13.4/css/dataTables.jqueryui.css" rel="stylesheet"/>
+<link href="./DataTables/Buttons-2.3.6/css/buttons.jqueryui.css" rel="stylesheet">
+
+<!--link href="./DataTables/datatables.min.css" rel="stylesheet"/-->
+ 
+<script src="./DataTables/datatables.min.js"></script>
+<!--link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"-->
+<!--link type="text/css" rel="stylesheet" href="./lib/css/jquery.jqplot.css" /-->
+<!--script type="text/javascript" src="./lib/js/chart.js"></script>
+<script type="text/javascript" src="./lib/js/chartjs-adapter-date-fns.bundle.min.js"></script-->
+<!--script type="text/javascript" src="./lib/js/jquery-latest.js"></script-->
+<!--script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script-->
+<script type="text/javascript" src="./lib/js/jquery-ui-latest.js"></script>
+<!--script type="text/javascript" src="./lib/js/html2pdf.bundle.min.js"></script-->
+<!--script type="text/javascript" src="./lib/js/jquery-migrate-3.4.0.js"></script-->
+<!--script type="text/javascript" src="./lib/js/jquery.layout-1.3.0.rc30.80.js"></script-->
+<!--script type="text/javascript" src="./lib/js/jquery-csv.js"></script-->
+<script type="text/javascript" src="./lib/js/d3.v7.min.js"></script>
+<!--script src="./DataTables/JSZip-2.5.0/jszip.js"></script>
+<script src="./DataTables/pdfmake-0.1.36/pdfmake.js"></script>
+<script src="./DataTables/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script src="./DataTables/DataTables-1.13.4/js/jquery.dataTables.js"></script>
+<script src="./DataTables/DataTables-1.13.4/js/dataTables.jqueryui.js"></script>
+<script src="./DataTables/Buttons-2.3.6/js/dataTables.buttons.js"></script>
+<script src="./DataTables/Buttons-2.3.6/js/buttons.jqueryui.js"></script>
+<script src="./DataTables/Buttons-2.3.6/js/buttons.html5.js"></script>
+<script src="./DataTables/Buttons-2.3.6/js/buttons.print.js"></script-->
+
+
+<!--script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script-->
+<!--script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script-->
+<script>
+
+// Global Variables 
+//var ctx;
+// var canvas = [];
+// var charts = [];
+var slider, timeStart, timeEnd; // slider and selected values for time - reset on file load
+// var sliderX, xMax, xMin, plotXMax, plotXMin; // sider for selected Max and Min of X - reset on file load or rotation
+// var sliderY, yMax, yMin, plotYMax, plotYMin; // slider for slecting max and min of Y - reset on file load or rotation
+// var sliderRot, angle = 0;// Rotation slider, default 0  
+//var minTime, maxTime, minLat, maxLat, minLon, maxLon, minX, maxX, minY, maxY; // from all datasets loaded
+// var lineStartX, lineStartY;
+// var markCounter = 1;
+// var lineCounter = 1;
+// first 6 reset on file load, last four reset on file load or rotation.  
+// var R = 6378137.0; // radius of earth
+// var angle = 0; // angle value (from angle slider)
+//var annimationInterval; // used to remember how long before updating graph in animation
+//var lastUpdate; // remembers last time graph was updated (so time delta can be calculated for annimation)
+
+// var loadedData = []; //Stores all loaded data.
+
+// var parseTime = d3.timeParse("%y-%m-%d %H:%M:%S.%L");
+// var t0 = new Date(2000, 1, 1);
+//var editLabelDialog, label , labelID ;
+
+// variables for DB2
+var rawData = [];
+var gData = []; 
+var gByDSN = [];
+var gByJob = [];
+var tableList = [];
+//var colors = ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
+// var colors = ['#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a','#ff7c43','#ffa600'];
+//var colorCounter = 0;
+
+/** const plugin = {
+  id: 'customCanvasBackgroundColor',
+  beforeDraw: (chart, args, options) => {
+    const {ctx} = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = options.color || '#99ffff';
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  }
+}; **/
+
+$(document).ready(function () {  
+  /**
+   * The following section function, will put any <a class="modal"...> into a dialog, that can be moved around
+   * Currently used to provide help window.  
+   * **/
+ 
+  $('.modal').on('click', function(e){
+      e.preventDefault();
+      $('<div/>', {'class':'myDlgClass', 'id':'link-'+($(this).index()+1)})
+      .load($(this).attr('href')).appendTo('body').dialog().dialog("option","title","Help");
+  });
+ 
+  
+  /**$("#showNum").spinner({
+      step: 1,
+      change: function( event, data ) {
+        // console.log(event);
+        sortTables($('#sortBy').val(), parseInt($('#showNum').val()));
+      }
+     }); **/
+  // $("#showNum").width(30);
+  /**$('#sortBy').selectmenu({
+      change: function( event, data ) {
+        sortTables(data.item.value, parseInt($('#showNum').val()));
+      }
+     }); **/
+
+  
+  $("#rightcolumn").resizable({handles: 'e'});
+  $("#leftcolumn").resizable({handles: 'e'});
+
+  $( "#navbar" ).menu({position: {at: "left bottom"}});
+
+  showDSNTable();
+
+  
+  //$("#rightcolumn").draggable();
+  //$("#leftcolumn").draggable();
+  
+  /** 
+   * label, lableID editLabelDialog and form are all used as part of the ability to modify labels on
+   * the boats, marks and lines
+   * **/
+  //label = $( "#label" );    labelID = $( "#labelID" ); fullID = $("#fullID") ; // label and labelID are use for updating labels 
+  //accessRateMax = $("#accessRateMax"); accessRateAve = $("#accessRateAve");
+  //updateRateMax = $("#updateRateMax"); updateRateAve = $("#updateRateAve"); 
+  /**
+  editLabelDialog = $( "#dialog-editLabel" ).dialog({ //dialog that collects labels  
+    autoOpen: false,
+    height: 200,
+    width: 350,
+    modal: true,
+    buttons: {
+      "Update Label": updateLabel,
+      Cancel: function() {
+        editLabelDialog.dialog( "close" );
+      }
+    },
+    close: function() {
+      form[ 0 ].reset();
+    }
+  }); **/
+  /**
+  form = editLabelDialog.find( "form" ).on( "submit", function( event ) {
+    event.preventDefault();
+    console.log(labelID.val() +" " + label.val())
+    updateLabel();
+  });**/
+
+  // Slider at bottom of graph with start and finish times
+  slider = $( "#slider" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ 75, 300 ],
+      slide: function( event, ui ) {
+          //console.log( ui.values[ 0 ] + "  " + ui.values[ 1 ] );
+          timeStart = ui.values[ 0 ];
+          timeEnd = ui.values[ 1 ];
+      updateTime();
+    },
+  });
+  
+  // Canvas for Plot, includes mousedown functions to add marks, and Lines
+  //ctx = $('#myChart');
+      
+  // Create chart variable
+  //var myChart = new Chart(ctx, {
+      //type: 'line',
+      //data: {}
+  //});
+
+  document.querySelector("#csv").addEventListener('change',function () {
+    
+    var files = document.querySelector("#csv").files; // a collection of files, if the user selects more than one
+    Array.from(files).forEach(file => {
+        // TBD perform validation on file type & size if required
+        var reader = new FileReader();
+        reader.addEventListener('loadstart', function() {
+          // console.log('File reading started');
+          // This event only useful, if Logging of file reading start is required
+        });
+    
+        reader.addEventListener('load', function(e) { // add listener for when file has finished loading
+        // TO BE DONE: Validate csv format is good for this application
+          result = e.target.result; // should contain a collection of rows from file
+          //console.log(result);
+          // const whiteSpaceParser = d3.dsvFormat(" ");
+          //const data = whiteSpaceParser.parse(result);
+          rawData = d3.csvParse(result, processRow);
+            // if (row.length > 10)
+        
+          // console.log(rawData);
+          //var rData = d3.rollup(rawData, sumREADS ,d=>d.R_DSN)
+          //console.log(rData);
+          
+          processRawData();
+        });
+        reader.readAsText(file);
+    });
+  });     
+ });
+
+//function sumREADS(group) {
+  //return d3.sum(group, function(d) {
+    //return d.READS;
+  //});
+//}
+
+function processRow(d){
+  Object.keys(d).forEach(function(origProp) {
+    var trimmedProp = origProp.trim();
+    if (trimmedProp !== origProp) {
+      d[trimmedProp] = d[origProp];
+      delete d[origProp];
+    }
+ 
+  });
+  var tDate = new Date(parseInt("20"+d.DATE.slice(0,2)), 0); 
+  var doy = parseInt(String(d.DATE).slice(2));
+  var t = d['HH:MM:SS'].split(':');
+  var h=parseInt(t[0]); var m=parseInt(t[1]); var s=parseInt(t[2]); 
+  tDate = new Date(tDate.setDate(doy));
+  tDate = new Date(tDate.getYear(), tDate.getMonth(), tDate.getDay(), h, m, s, 0);
+  d.timestamp = tDate;
+  return{
+      DATABUF: +d.DATABUF, 
+      DATE: d.DATE, 
+      timestamp: d.timestamp, 
+      time: d['HH:MM:SS'],
+      DELETE: +d.DELETE, //"00000000000"
+      EXCPS: +d.EXCPS, //"00000054873"
+      INDXBUF: +d.INDXBUF, //"0000000"
+      INSERTS: +d.INSERTS,//"00000000000"
+      READS: +d.READS, //"00000000000"
+      RECCNT: +d.RECCNT, //"00000000000"
+      RECLEN: +d.RECLEN, //"00000032767"
+      R_DDN: d.R_DDN,//"SYS00003"
+      R_DNM: d.R_DNM.trim(), //"SYS1.LIVE.MAN1.DATA                         "
+      R_DSN: d.R_DSN.trim(), //"SYS1.LIVE.MAN1                              "
+      R_JOB: d.R_JOB.trim(), //"SMF     "
+      SID: d.SID, //"LIVE"
+      UPDATE: +d.UPDATE //"00000000000"
+    };
+ }
+
+
+function processRawData() {
+  gData = d3.group(rawData, d=>d.R_DSN);
+  //console.log(gData);
+  for (let [key, value] of gData){
+    var item = {
+      key: key,
+      reads: d3.sum(value, d=>d.READS),
+      excps: d3.sum(value, d=>d.EXCPS),
+      deletes: d3.sum(value, d=>d.DELETE),
+      inserts: d3.sum(value, d=>d.INSERTS),
+      updates: d3.sum(value, d=>d.UPDATE), 
+      changes: d3.sum(value, d=>{return d.DELETE+d.INSERTS+d.UPDATE}),
+      size: d3.max(value, d=>{return d.RECLEN*d.RECCNT/1024.0/1024.0/1024.0}),
+      longest: d3.max(value, d=>d.RECLEN),
+      most: d3.max(value, d=>d.RECCNT), 
+      latest: d3.max(value, d=>d.timestamp),
+      earliest: d3.min(value, d=>d.timestamp)
+    };
+    gByDSN.push(item);
+  };
+  console.log(gByDSN.sort((a,b)=> {return a.reads > b.reads ? -1:1}));
+  $('#mainTable').DataTable().clear().rows.add(gByDSN).draw();
+  // showDSNTable();
+}
+
+function groupDataByJob(DSN) {
+  //console.log(DSN);
+  //console.log(gData.get(DSN));
+  var jData = d3.group(gData.get(DSN), d=>d.R_JOB);
+  
+  for (let [key, value] of jData){
+    var item = {
+      key: key,
+      reads: d3.sum(value, d=>d.READS),
+      excps: d3.sum(value, d=>d.EXCPS),
+      deletes: d3.sum(value, d=>d.DELETE),
+      inserts: d3.sum(value, d=>d.INSERTS),
+      updates: d3.sum(value, d=>d.UPDATE), 
+      changes: d3.sum(value, d=>{return d.DELETE+d.INSERTS+d.UPDATE}),
+      size: d3.max(value, d=>{return d.RECLEN*d.RECCNT/1024.0/1024.0/1024.0}),
+      longest: d3.max(value, d=>d.RECLEN),
+      most: d3.max(value, d=>d.RECCNT), 
+      latest: d3.max(value, d=>d.timestamp),
+      earliest: d3.min(value, d=>d.timestamp)
+    };
+    gByJob.push(item);
+  };
+  console.log(gByJob.sort((a,b)=> {return a.reads > b.reads ? -1:1}));
+  $('#jobTable').DataTable().clear().rows.add(gByJob).draw();
+  $('#jobTableHeader').text("Aggregated by Job for "+DSN);
+  // showDSNTable();
+}
+
+function showDSNTable(){
+  var maxSize = $('#maxSize');
+  var regexInclude = $('#regexInclude');
+  var regexExclude = $('#regexExclude');
+  $('#applyFilters').click(function(){console.log("button clicked"); table.draw();});
+  $.fn.dataTable.ext.search.push(function (settings, data, dataIndex){
+    var size = parseFloat(maxSize.val());
+    var tSize = parseFloat(data[4]) ||0;
+    //console.log(tbleSize+" "+size);
+    var value = true;
+    
+    if( regexExclude.val().length > 0){
+      var exclude = new RegExp(regexExclude.val());
+      value = !exclude.test(data[0]);
+      // console.log(value + " " +data[0]);
+    }
+    if( regexInclude.val().length > 0){
+      var include = new RegExp(regexInclude.val());
+      value = include.test(data[0]);
+      // console.log(value + " " +data[0]);
+    }
+
+    if( !isNaN(size) && tSize > size) {value = false;}
+
+    //console.log(data);
+    //console.log(tbleSize+" >= "+size);
+    return value;
+  });
+  
+  var table = $('#mainTable').DataTable({
+    buttons: [
+            'print'
+        ],
+    data: gByDSN,
+    columns: [
+        { data: 'key', title: "DSN"},
+        { data: 'reads' , title: "Reads"},
+        { data: 'excps' , title: "EXCPS"},
+        { data: 'changes', title: "Changes"},
+        //{ data: 'deletes' , title: "deletes"},
+        //{ data: 'inserts' , title: "inserts"},
+        //{ data: 'updates' , title: "updates"},
+        { data: 'size' , title: "Largest Size (GB)", render: d=>d.toFixed(2)},
+        { data: 'earliest' , title: "From", render: d=>d.toLocaleString()},
+        { data: 'latest' , title: "To", render: d=>d.toLocaleString()},
+        //{ data: 'most' , title: "Max Row Count"},
+    ],
+  });
+
+  var jobTable = $('#jobTable').DataTable({
+    data: gByJob,
+    columns: [
+        { data: 'key', title: "JOB"},
+        { data: 'reads' , title: "Reads"},
+        { data: 'excps' , title: "EXCPS"},
+        { data: 'changes', title: "Changes"},
+        //{ data: 'deletes' , title: "deletes"},
+        //{ data: 'inserts' , title: "inserts"},
+        //{ data: 'updates' , title: "updates"},
+        { data: 'size' , title: "Largest Size (GB)", render: d=>d.toFixed(2)},
+        { data: 'earliest' , title: "From", render: d=>d.toLocaleString()},
+        { data: 'latest' , title: "To", render: d=>d.toLocaleString()},
+        //{ data: 'most' , title: "Max Row Count"},
+    ],
+  });
+
+  //maxSize.on('input', function (){
+    //table.draw();
+    //console.log("redraw");
+  //})
+
+  $('#mainTable tbody').on('click', 'tr', function () {
+        var data = table.row(this).data();
+        //alert('You clicked on ' + data['key'] + "'s row");
+        addTableToList(data['key']);
+    });
+}
+
+function showRawTable(key){
+
+}
+
+/**
+ * 
+ * **
+function sortTables(method, factor){
+  // console.log(method+" "+factor);
+  tableStats = tableStats.sort((a,b)=> {return a[method] > b[method] ? 1 : -1 });
+  // builtPlotData();
+  //tableStats[0][method];
+  colorCounter = 0;
+  shownCounter = 1;
+  // minTime = tableStats[0].data[0].timestamp;
+  //maxTime = tableStats[0].data[0].timestamp;
+  tableStats.forEach(function(item) {
+    // if(item[method] > tableStats[0][method] / factor){
+    if(shownCounter <= factor && !isNaN(item[method])){
+      item.hidden = false;
+      shownCounter +=1;
+    } else {item.hidden = true;}
+    item.borderColor = colors[colorCounter];
+    item.backgroundColor = colors[colorCounter];
+    // minTime = (minTime> d3.min())
+    colorCounter +=1; colorCounter = (colorCounter > colors.length-1) ? 0 : colorCounter;
+      
+      // if(colorCounter > colors.length-1){colorCounter = 0;}
+  })
+  updateMaxMin()
+ 
+  plotTable(ctx, Chart.getChart('myChart'), tableStats);
+  // plotData();
+  updateObjectList();
+}**/
+
+/** updateMaxMin updates all maximums and minimums
+ * 
+function updateMaxMin (){
+  minTime = d3.min(tableStats, function(ld){return d3.min(ld.data, function(d){return d.timestamp})});
+  maxTime = d3.max(tableStats, function(ld){return d3.max(ld.data, function(d){return d.timestamp})});
+  slider.slider("option", "min", minTime); slider.slider("option", "max", maxTime);
+  slider.slider('values',0,minTime); // sets first handle (index 0) to 50
+  slider.slider('values',1,maxTime);
+} **/
+
+function downloadReport(){
+  var element = document.getElementById('report');
+  var opt = {
+    margin:       1,
+    filename:     'html2pdf_example.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    pagebreak:    { mode: 'avoid-all', after: '#break' },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  // Choose the element that our invoice is rendered in.
+  html2pdf().set(opt).from(element).save();
+}
+
+function generateReport(){
+  $('#report').empty();
+  /**tableStats.forEach(function(item) {
+    //var smallDiv = '<div class="Card"><p></p></div>';
+    if(!item.hidden){
+      var smallDiv = '<div class="card" name="'+item.label+'"><h2>'+item.label+'</h2>';
+      smallDiv += '<p>This tables has an average read rate (per second) of '+item.accessRateAve+' which represents a MIP usage of '+item.accessRateAve/400+' to '+item.accessRateAve/100+'MIPS for the entire period of the graph. </p>';
+      smallDiv += '<p>This tables has an peak read rate (per second) of '+item.accessRateMax+' which represents a MIP usage of '+item.accessRateMax/400+' to '+item.accessRateMax/100+'MIPS for the entire period of the peak. </p>';
+      if(item.hasReorg){smallDiv += '<p>This table has been reorg\'d at somepoint, which may impact results.  This is indicated on the graph by a sloped line (due to  missing data point when the reorg occured).</p>';}
+      smallDiv += '</div>';
+      var pagebreak = '<div id="break" name="break" class="break" style="break-before: always;"></div>';
+      var canvas = document.createElement('canvas');
+      $('#report').append(smallDiv).append(canvas).append(pagebreak);
+      var ctxs = canvas.getContext("2d");
+      var chart =  new Chart(ctxs, {
+                                type: 'line',
+                                data: {}
+                            });
+      plotTable(ctxs, chart, tableStats.filter(function(el){ return el.id === item.id}));
+    }
+  }) **/
+}
+
+/** updateTime()
+ * Update graph filtering based  on start and end time values
+ * **/
+function updateTime(){
+  /** var myChart = Chart.getChart('myChart');
+  myChart.options.scales.x.min = timeStart;
+  myChart.options.scales.x.max = timeEnd;
+  // If time difference between timeStart and timeEnd is small, add in 6 hour ticks
+  myChart.update(); **/
+}
+  
+/** updateObjectList 
+ *  Builds the list of objects, including options to delete, make invisible, etc
+ * **/
+function updateObjectList(){
+  var loadedObjects = $('#loadedObjects')
+  // var colors = ['#FF0000', '#00FF00', '#0000FF', '#808080']
+  
+  loadedObjects.empty();
+  for(var key in tableList) {
+    
+    var vis_icon = '<span class="ui-icon ui-icon-check" onclick="showItem('+key+')"></span><span class="ui-icon ui-icon-blank"></span>';
+    
+    loadedObjects.append(
+      '<div>' 
+      //+ vis_icon
+      + '<span class="ui-icon ui-icon-trash" onclick="deleteItem('+key+')"></span>'
+      //+ '<span class="ui-icon ui-icon-pencil" onclick="editLabelPopup('+key+')"></span>'
+      + tableList[key]+'</div>'
+    )
+  }
+}
+
+function addTableToList(value){
+  if(!tableList.includes(value)){tableList.push(value);}
+  // console.log(tableList)
+  updateObjectList();
+  groupDataByJob(value);
+}
+
+/**
+ * editLabelPopup - brings up the edit label dialog, and sets the values
+ * updateLabel - then does the actual label updating, once users has entered the information
+ * **
+function editLabelPopup(i){
+  // console.log(i);
+  labelID.val(i);
+  label.val(tableStats[i].label);
+  fullID.val(tableStats[i].id);
+  accessRateMax.val(tableStats[i].accessRateMax);
+  accessRateAve.val(tableStats[i].accessRateAve);
+  updateRateMax.val(tableStats[i].updateRateMax);
+  updateRateAve.val(tableStats[i].updateRateAve);
+  editLabelDialog.dialog("open");
+}
+function updateLabel(){
+  // console.log (labelID.val() + " " + label.val());
+  tableStats[labelID.val()].label = label.val();
+  editLabelDialog.dialog("close");
+  updateObjectList();
+} /
+
+/** 
+ * deleteItem deletes and item from the list of plottable items
+ * **/
+function deleteItem(key){
+  tableList.splice(key, 1);
+  updateObjectList();
+}
+
+/** 
+ * hideItem changes the visibility of an item.
+ * **
+function hideItem(i){
+  tableStats[i].hidden = true;
+  updateObjectList();
+  Chart.getChart('myChart').update();
+} **/
+
+/**
+ * showItem changes the visitilbity of an item
+ * 
+function showItem(i){
+  tableStats[i].hidden = false;
+  updateObjectList();
+  Chart.getChart('myChart').update();
+} **/
+
+/**
+ * Update Color, updates the color of the item, based on 
+ * 
+function updateColor(i, color){
+  console.log("updating color of "+i+" with "+color.value+" from "+tableStats[i].borderColor);
+  tableStats[i].borderColor = color.value;
+  updateObjectList();
+  Chart.getChart('myChart').update();
+} **/
+
+/** 
+ * Screen shot takes a PNG of the current chart and downloads it.  
+ * TODO: add white background before downloading.
+ * **/
+function screenShot(){
+  var a = document.createElement('a');
+  //a.href = Chart.getChart('myChart').toBase64Image("image/png", 1.0);
+  a.href = document.getElementById('myChart').toDataURL('image/png');
+  a.download = 'screenshot.png';
+  a.click();
+}
+
+  
+</script>
+</head>
+<body>
+  <!--div id="dialog-editLabel" title="Edit Label">
+    <form>
+      <fieldset>
+        <label for="label">Label</label>
+        <input type="text" name="label" id="label" value="Boat ?" class="text ui-widget-content ui-corner-all">
+        <input type="hidden" name="labelID" id="labelID" value="1" /-->
+        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+        <!--input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        <label for="fullID">Unique ID:</label>
+        <input type="text" id="fullID" readonly="readonly" value=""/>
+        <label for="accessRateMax">Max Access Rate:</label>
+        <input type="text" id="accessRateMax" readonly="readonly" value=""/>
+        <label for="accessRateAve">Average Access Rate:</label>
+        <input type="text" id="accessRateAve" readonly="readonly" value=""/>
+        <label for="updateRateMax">Maximum Update Rate:</label>
+        <input type="text" id="updateRateMax" readonly="readonly" value=""/>
+        <label for="updateRateAve">Average Update Rate</label>
+        <input type="text" id="updateRateAve" readonly="readonly" value=""/>
+      </fieldset>
+    </form>
+  </div-->
+<div class="header">
+  <h2>IZTA VSAM file candidate analysis</h2>
+</div>
+
+<div class="topnav" id="navbar">
+  <!--a href="#" onclick="downloadJSON()">Save</a-->
+  <a href="#" onclick="$('#csv').trigger('click')">Load Files</a>
+  <!--a href="#" onclick="loadJSON()">Load</a-->
+  <a href="#" onclick="screenShot()">Screenshot</a>
+  <a href="#" onclick="generateReport()">Report</a>
+  <a href ="#" onclick="downloadReport()">Download</a>
+  <!--a href="#" onclick="sortTables('accessRateAve', 100)">Sort by avg</a-->
+  <!--a href="#" onclick="sortTables('accessRateMax',100)">Sort by max</a-->
+  <a href="help.html" rel="modal:open" class="modal" style="float:right">Help</a>
+  <div hidden="hidden"><input id="csv" type="file" class="form-control"  multiple> </input></div>
+</div>
+
+<div class="row">
+  <div class="leftcolumn" id="leftcolumn">
+    
+    <div class="card">
+      <h2>VSAM Files aggregated by DSN</h2>
+      <div>
+        <table id="mainTable" class="display" width="100%"></table>
+      </div>
+    </div>
+    <div class="card">
+      <h2 id="jobTableHeader"></h2>
+      <div>
+        <table id="jobTable" class="display" width="100%"></table>
+      </div>
+    </div>
+    <div class="card">
+      <h2 id="rawTableHeader"></h2>
+      <div>
+        <table id="rawTable" class="display" width="100%"></table>
+      </div>
+    </div>
+    <div id="report"></div>
+  </div>
+  <div class="rightcolumn" id="rightcolumn">
+    <div class="card">
+      <h3>Filters:</h3>
+      <div style="display:flex"><label for="maxSize">Maximum File Size:</label>
+        <input id="maxSize" name="maxSize" type="text"/></div>
+      <div style="display:flex"><label for="regexInclude">Regex include:</label>
+        <input id="regexInclude" name="regexInclude" type="text"/></div>
+      <div style="display:flex"><label for="regexExclude">REgex exclude:</label>
+        <input id="regexExclude" name="regexExclude" type="text"/></div>
+      <button id="applyFilters" name="applyFilters">Apply Filters</button>
+    </div>
+    <!--div class="card" >
+      <div class = "formblacktransparent" >
+        <p>Sort by: 
+          <select id="sortBy" name = "sortby">
+            <option value="accessRateAve" selected="selected">Average Access Rate</option>
+            <option value="accessRateMax">Maximum Access Rate</option>
+          </select>
+        </p>
+        <p>Show top <input id="showNum" name="showNume" value="10" width="20"/> tables.
+        </p>
+      </div>
+    </div-->
+    <!--div class="card">
+      <h3>Rotate View:</h3>
+      <div id="sliderRot"></div>
+      <h3>Annimate Time:</h3>
+      <button id="updatetime" onclick="startStopAnnimdation()">Start / Stop Annimation</button><input type="number" id="timeMultiplier" value="10"></input>
+    </div-->
+    <div class="card">
+      <h3>Selected DSN:</h3>
+      <div id="loadedObjects">
+      </div>
+    </div>
+  </div>
+  <div class="helpcolumn" id="helpcolumn"></div>
+</div>
+
+<!--div class="footer">
+  <h2>Footer</h2>
+</div-->
+
+</body>
+</html>
