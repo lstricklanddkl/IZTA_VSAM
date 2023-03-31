@@ -292,18 +292,16 @@ $(document).ready(function () {
     
         reader.addEventListener('load', function(e) { // add listener for when file has finished loading
         // TO BE DONE: Validate csv format is good for this application
-          result = e.target.result; // should contain a collection of rows from file
-          //console.log(result);
-          // const whiteSpaceParser = d3.dsvFormat(" ");
-          //const data = whiteSpaceParser.parse(result);
-          rawData = d3.csvParse(result, processRow);
-            // if (row.length > 10)
-        
-          // console.log(rawData);
-          //var rData = d3.rollup(rawData, sumREADS ,d=>d.R_DSN)
-          //console.log(rData);
-          
-          processRawData();
+          var header = e.target.result.split('\n').shift().replace(/\s/g, '');
+          // result = e.target.result; // should contain a collection of rows from file
+          console.log(header);
+          if( /R_JOB,R_DDN,R_DSN,R_DNM,EXCPS,INSERTS,DELETE,UPDATE,READS,RECCNT,RECLEN,DATABUF,INDXBUF,SID,DATE,HH:MM:SS/.test(header)){
+            rawData = d3.csvParse(e.target.result, processRow);
+            processRawData();
+          } else {
+            alert("File format appears invalid");
+          }
+            
         });
         reader.readAsText(file);
     });
