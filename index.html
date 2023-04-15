@@ -14,6 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/cr-1.6.2/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
 
 
@@ -60,8 +61,8 @@
   <a href="#" onclick="$('#csv').trigger('click')">Load Files</a>
   <!--a href="#" onclick="loadJSON()">Load</a-->
   <a href="#" onclick="screenShot()">Screenshot</a>
-  <a href="#" onclick="generateReport()">Report</a>
-  <a href ="#" onclick="downloadReport()">Download</a>
+  <a href="#" onclick="generateReport(false)">Report by Job</a>
+  <a href ="#" onclick="generateReport(true)">Detailed Report</a>
   <!--a href="#" onclick="sortTables('accessRateAve', 100)">Sort by avg</a-->
   <!--a href="#" onclick="sortTables('accessRateMax',100)">Sort by max</a-->
   <a href="help.html" rel="modal:open" class="modal" style="float:right">Help</a>
@@ -72,6 +73,9 @@
   <div class="leftcolumn" id="leftcolumn">
     <div id="progressbars"></div>
     <!--div id="progressbar"><div class="progress-label">Loading...</div></div-->
+    <div class="card">
+      <h2 id="fileHeader"></h2>
+    </div>
     <div class="card">
       <h2>VSAM Files aggregated by DSN</h2>
       <div>
