@@ -1,2 +1,0 @@
-DataTables ? https://datatables.net/examples/data_sources/js_array.html
-
