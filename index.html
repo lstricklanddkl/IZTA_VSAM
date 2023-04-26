@@ -19,11 +19,15 @@
 <link href="./lib/css/jquery-ui.min.css" rel="stylesheet"/>
 <!--link href="./DataTaTablesNew/DataTables-1.13.4/css/dataTables.jqueryui.min.css" rel="stylesheet"/-->
 <!--link href="./DataTaTablesNew/Buttons-2.3.6/css/buttons.jqueryui.min.css" rel="stylesheet"/-->
-<link href="./lib/css/datatables.min.css" rel="stylesheet"/>
- 
+<link href="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.css" rel="stylesheet"/>
+<!--link href="./lib/css/datatables.min.css" rel="stylesheet"/-->
+<script type="text/javascript" src="./lib/js/chart.js"></script>
+<script type="text/javascript" src="./lib/js/chartjs-adapter-date-fns.bundle.min.js"></script>
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script-->
-<script src="./lib/js/datatables.min.js"></script>
+<script src = https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js></script>
+<script src="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.js"></script>
+<!--script src="./lib/js/datatables.min.js"></script-->
 <script src="./lib/js/jquery-ui-latest.js"></script>
 <script src="./lib/js/xlsx.full.min.js"></script>
 
@@ -31,18 +35,14 @@
 
 
  
-<!--script src="./DataTaTablesNew/jQuery-3.6.0/jquery-3.6.0.min.js"></script-->
-<!--script src="./DataTaTablesNew/JSZip-2.5.0/jszip.min.js"></script-->
-<!--script src="./DataTaTablesNew/pdfmake-0.1.36/pdfmake.min.js"></script-->
-<!--script src="./DataTaTablesNew/pdfmake-0.1.36/vfs_fonts.js"></script-->
-<!--script src="./DataTaTablesNew/DataTables-1.13.4/js/jquery.dataTables.min.js"></script-->
-<!--script src="./DataTaTablesNew/DataTables-1.13.4/js/dataTables.jqueryui.min.js"></script-->
-<!--script src="./DataTaTablesNew/Buttons-2.3.6/js/dataTables.buttons.min.js"></script-->
-<!--script src="./DataTaTablesNew/Buttons-2.3.6/js/buttons.jqueryui.min.js"></script-->
-<!--script src="./DataTaTablesNew/Buttons-2.3.6/js/buttons.colVis.min.js"></script-->
-<!--script src="./DataTaTablesNew/Buttons-2.3.6/js/buttons.html5.min.js"></script-->
-<!--script src="./DataTaTablesNew/Buttons-2.3.6/js/buttons.print.min.js"></script-->
-<!--script src="./js/xlsx.full.min.js"></script-->
+<!--
+<link href="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.css" rel="stylesheet"/>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.js"></script>
+
+-->
 
 
 <!--script type="text/javascript" src="./lib/js/jquery-latest.js"></script>
@@ -121,6 +121,13 @@
         <table id="rawTable" class="display" width="100%"></table>
       </div>
     </div>
+    <div class="card">
+      <h2 id="rawChartHeader"></h2>
+      <div>
+        <canvas id="myChart"></canvas>
+        <div id="slider" style="position: relative;"></div>
+      </div>
+    </div>
     <div id="report"></div>
   </div>
   <div class="rightcolumn" id="rightcolumn">
@@ -130,8 +137,12 @@
         <input id="maxSize" name="maxSize" type="text"/></div>
       <div style="display:flex"><label for="regexInclude">Regex include:</label>
         <input id="regexInclude" name="regexInclude" type="text"/></div>
-      <div style="display:flex"><label for="regexExclude">REgex exclude:</label>
+      <div style="display:flex"><label for="regexExclude">Regex exclude:</label>
         <input id="regexExclude" name="regexExclude" type="text"/></div>
+      <div style="display:flex"><label for="startTime">Start Time:</label>
+        <input id="startTime" name="startTime" class="form-control"/></div>
+      <div style="display:flex"><label for="finishTime">Finish Time:</label>
+        <input id="finishTime" name="finishTime" class="form-control"/></div>
       <button id="applyFilters" name="applyFilters">Apply Filters</button>
     </div>
     <!--div class="card" >
