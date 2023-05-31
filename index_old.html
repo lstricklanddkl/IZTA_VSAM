@@ -1,58 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--link href="./DataTables/datatables.min.css" rel="stylesheet"-->
 <link rel="stylesheet" href="./lib/css/layout.css">
-<!--link rel="stylesheet" href="./lib/css/jquery-ui.min.css">
+<link rel="stylesheet" href="./lib/css/jquery-ui.min.css">
 <link href="./DataTables/DataTables-1.13.4/css/dataTables.jqueryui.css" rel="stylesheet"/>
-<link href="./DataTables/Buttons-2.3.6/css/buttons.jqueryui.css" rel="stylesheet"-->
-
-<!--link href="./css/jquery-ui.min.css" rel="stylesheet"/>
-<link href="./css/datatables.min.css" rel="stylesheet"/-->
-
-<!--script src="./js/pdfmake.min.js"></script>
-<script src="./js/vfs_fonts.js"></script>
-<script src="./js/datatables.min.js"></script>
-<script src="./js/jquery-ui.min.js"></script>
-<script src="./js/xlsx.full.min.js"></script-->
-
-<link href="./lib/css/jquery-ui.min.css" rel="stylesheet"/>
-<!--link href="./DataTaTablesNew/DataTables-1.13.4/css/dataTables.jqueryui.min.css" rel="stylesheet"/-->
-<!--link href="./DataTaTablesNew/Buttons-2.3.6/css/buttons.jqueryui.min.css" rel="stylesheet"/-->
-<link href="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.css" rel="stylesheet"/>
-<!--link href="./lib/css/datatables.min.css" rel="stylesheet"/-->
-<script type="text/javascript" src="./lib/js/chart.js"></script>
-<script type="text/javascript" src="./lib/js/chartjs-adapter-date-fns.bundle.min.js"></script>
-<!--script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script-->
-<script src = https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js></script>
-<script src="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.js"></script>
-<!--script src="./lib/js/datatables.min.js"></script-->
-<script src="./lib/js/jquery-ui-latest.js"></script>
-<script src="./lib/js/xlsx.full.min.js"></script>
-
-
-
-
- 
-<!--
-<link href="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.css" rel="stylesheet"/>
- 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/v/ju/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/date-1.4.1/datatables.min.js"></script>
-
--->
-
-
-<!--script type="text/javascript" src="./lib/js/jquery-latest.js"></script>
-<script src="./DataTables/datatables.min.js"></script>
-<script type="text/javascript" src="./lib/js/jquery-ui-latest.js"></script-->
+<link href="./DataTables/Buttons-2.3.6/css/buttons.jqueryui.css" rel="stylesheet">
 
 <!--link href="./DataTables/datatables.min.css" rel="stylesheet"/-->
  
-<!--script src="./DataTables/datatables.min.js"></script-->
-
+<script src="./DataTables/datatables.min.js"></script>
+<script type="text/javascript" src="./lib/js/jquery-ui-latest.js"></script>
 <script type="text/javascript" src="./lib/js/d3.v7.min.js"></script>
 
 <script type="text/javascript" src="./lib/js/vsam.js"></script>
@@ -88,47 +45,34 @@
   <a href="#" onclick="$('#csv').trigger('click')">Load Files</a>
   <!--a href="#" onclick="loadJSON()">Load</a-->
   <a href="#" onclick="screenShot()">Screenshot</a>
-  <a href="#" onclick="generateReport(false)">Report by Job</a>
-  <a href ="#" onclick="generateReport(true)">Detailed Report</a>
+  <a href="#" onclick="generateReport()">Report</a>
+  <a href ="#" onclick="downloadReport()">Download</a>
   <!--a href="#" onclick="sortTables('accessRateAve', 100)">Sort by avg</a-->
   <!--a href="#" onclick="sortTables('accessRateMax',100)">Sort by max</a-->
   <a href="help.html" rel="modal:open" class="modal" style="float:right">Help</a>
-  <div hidden="hidden"><input id="csv" type="file" class="form-control" multiple> </input></div>
+  <div hidden="hidden"><input id="csv" type="file" class="form-control"  multiple> </input></div>
 </div>
-<div id = "main_body">
-  <div class="spinner" id="spinner_overlay"></div>
+
 <div class="row">
-  
   <div class="leftcolumn" id="leftcolumn">
-    
     <div id="progressbars"></div>
     <!--div id="progressbar"><div class="progress-label">Loading...</div></div-->
     <div class="card">
-      <h2 id="fileHeader"></h2>
-    </div>
-    <div class="card">
       <h2>VSAM Files aggregated by DSN</h2>
       <div>
-        <table id="mainTable" class="display compact order-column nowrap" width="100%"></table>
+        <table id="mainTable" class="display" width="100%"></table>
       </div>
     </div>
     <div class="card">
       <h2 id="jobTableHeader"></h2>
       <div>
-        <table id="jobTable" class="display compact order-column nowrap" width="100%"></table>
+        <table id="jobTable" class="display" width="100%"></table>
       </div>
     </div>
     <div class="card">
       <h2 id="rawTableHeader"></h2>
       <div>
-        <table id="rawTable" class="display compact order-column nowrap" width="100%"></table>
-      </div>
-    </div>
-    <div class="card">
-      <h2 id="rawChartHeader"></h2>
-      <div>
-        <canvas id="myChart"></canvas>
-        <div id="slider" style="position: relative;"></div>
+        <table id="rawTable" class="display" width="100%"></table>
       </div>
     </div>
     <div id="report"></div>
@@ -137,15 +81,11 @@
     <div class="card">
       <h3>Filters:</h3>
       <div style="display:flex"><label for="maxSize">Maximum File Size:</label>
-        <input id="maxSize" name="maxSize" type="text" value="2"/></div>
+        <input id="maxSize" name="maxSize" type="text"/></div>
       <div style="display:flex"><label for="regexInclude">Regex include:</label>
-        <input id="regexInclude" name="regexInclude" type="text" value="^[A-Z0-9]"/></div>
-      <div style="display:flex"><label for="regexExclude">Regex exclude:</label>
+        <input id="regexInclude" name="regexInclude" type="text"/></div>
+      <div style="display:flex"><label for="regexExclude">REgex exclude:</label>
         <input id="regexExclude" name="regexExclude" type="text"/></div>
-      <div style="display:flex"><label for="startTime">Start Time:</label>
-        <input id="startTime" name="startTime" class="form-control"/></div>
-      <div style="display:flex"><label for="finishTime">Finish Time:</label>
-        <input id="finishTime" name="finishTime" class="form-control"/></div>
       <button id="applyFilters" name="applyFilters">Apply Filters</button>
     </div>
     <!--div class="card" >
@@ -173,7 +113,6 @@
     </div>
   </div>
   <div class="helpcolumn" id="helpcolumn"></div>
-</div>
 </div>
 
 <!--div class="footer">
