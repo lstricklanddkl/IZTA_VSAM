@@ -2,18 +2,26 @@
 <h2> Loading Files</h2>
 <p> To load files:</p>
 <ol>
-    <li>Click on "Choose Files" button, to open teh file browser</li>
+    <li>Click on "Load Files" in menu bar, to open the file browser</li>
     <li>Select the files you want to open</li>
     <li>Click on the "Open" button to close the dialog</li>
-    <li>Click confirm to load the files</li>
 </ol>
 <h2>Tables</h2>
-<h3>Managing Plotted objects</h3>
-<p><b>Change label:</b>to rename an object, click on the <span class="ui-icon ui-icon-pencil"></span> icon, edit the label and select "Update Label" button</p>
-<p><b>Change color:</b>to change the color of an object, click on the current color and select a color from the list of options</p>
-<p><b>Hide table:</b>to hide a table, click on the <span class="ui-icon ui-icon-check"></span> icon, and that path will be hidden</p>
-<p><b>Show table:</b>to show a hiddentable, click on the <span class="ui-icon ui-icon-close"></span> icon, and that path will be shown</p>
-<h3>Change Time</h3>
-<p>To change the start and end times to be plotted, drag the handles of the sliders below the graph</p>
-<h3>Take Screenshot</h3>
-<p></p>
+<p>There are three tables shown, only the first will be populated initially (sorted by Reads).</p>
+<p>To populate the other tables, select a DSN (row) on the "VSAM Files aggregated by DSN".  This will populate the other two tables, providing more details of the DNS selected.  One is an aggregated view of that DSN by JOB.  THe second are the raw records for that job.</p>
+<p>It is possible to further filter the raw records by selecting a JOB in the "Aggregated by Job table".</p>
+<p><b>Sort by Column:</b>to sort by a particular colum, click on the header to initially sort smallest to largest, then click again to sort largest to smallest</p>
+<p><b>Column Visibility:</b>to show or hide columns in the table</p>
+<ol>
+    <li>Click on "Column visibility" button, to open list of columns</li>
+    <li>Select the columns you wish to be visible</li>
+    <li>Click outside the list of columns</li>
+</ol>
+<p><b>Excel Download:</b>to download an excel version of the table, click on the "Excel" button below the title of the table</p>
+<h2>Filters</h2>
+<p>There are a number of filters available to filter the results.  if a filter is altered, the "Apply Filters" button must be selected to recaculate the DSN table.  Note, other tables will only be repopulated once a row on the updated first table is selected</p>
+<p><b>Maximum File Size:</b>this filter eliminates any record that has a files size (in GB) that is shows the VSAM file is larger than the limit show.  Defaults to 2</p>
+<p><b>Regex include:</b>this filter eliminates any record where the DSN doesn't match the Regex expression.  Defaults to ^[A-Z0-9]</p>
+<p><b>Regex include:</b>this filter eliminates any record where the DSN matches the Regex expression.  Defaults to empty</p>
+<p><b>Job Regex include:</b>this filter eliminates any record where the doesn't match the Regex expression.  Defaults to empty</p>
+<p><b>Start Time and Finish Time:</b>these two values are used to select a period of the day that is to be used, records outside the range will be eliminated when calculating the result.  If the Finish Time is less than the Start Time, the period selected will be the period including midnight. </p>
